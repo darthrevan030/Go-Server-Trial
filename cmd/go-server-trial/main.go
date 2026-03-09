@@ -1,12 +1,39 @@
 package main
 
 import (
+	"context"
+	"time"
+	"log"
 	"net/http"
 
 	"github.com/darthrevan030/go-server-trial/internal/service"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+func mongoConnectionOpen() *mongo.Client {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017/go-server-trial"))
+
+	if err != nil {
+		log.Fatal("Failed to connect to MongoDB: ", err)
+	}
+
+	// verify connection
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal("MongoDB ping failed: ", err)
+	}
+
+	log.Println("Connected to MongoDB")
+	return client
+} 
+
 
 func main() {
 
