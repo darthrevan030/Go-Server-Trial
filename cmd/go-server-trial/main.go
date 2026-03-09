@@ -13,19 +13,26 @@ func main() {
 	// userservice instance
 	UserService := service.UserService{}
 
-	
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 
-	router.Get("/health", func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write([]byte("Server is healthy"))
-	})
+	r.Route("/api/v1", func(r chi.Router) {
+		r.Get("/health", func(writer http.ResponseWriter, request *http.Request) {
+			writer.Write([]byte("Server is healthy"))
+		})
 	
-	router.Get("/", func(writer http.ResponseWriter, request *http.Request) {
-		writer.Write([]byte("Welcome"))	
+		r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
+			writer.Write([]byte("Welcome"))	
+		})
+
+		r.Post("/users", UserService.CreateUser)
+		r.Get("/users", UserService.GetAllUsers)
+		r.Get("/users/{id}", UserService.GetUserByID)
+		r.Put("/users{id}", UserService.UpdateUserAgeByID)
+		r.Delete("/users/{id}", UserService.DeleteUserByID)
+		r.Delete("/users", UserService.DeleteAllUsers)
+	
 	})
 
-	router.Post("api/v1/users", )
-	
-	http.ListenAndServe(":3000", router)
+	http.ListenAndServe(":3000", r)
 }
