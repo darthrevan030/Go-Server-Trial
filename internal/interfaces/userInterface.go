@@ -1,4 +1,4 @@
-package interface
+package interfaces
 
 import "github.com/darthrevan030/go-server-trial/internal/model"
 
