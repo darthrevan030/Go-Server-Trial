@@ -49,15 +49,19 @@ func mongoConnectionOpen() *mongo.Client {
 
 func main() {
 
-	client := mongoConnectionOpen()
-	defer func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		client.Disconnect(ctx)
-	} ()
+	mongoClient := mongoConnectionOpen()
+	defer mongoClient.Disconnect(context.Background())
+
+	collection := mongoClient.Database(os.Getenv("MONGODB_NAME")).Collection(os.Getenv("MONGODB_COLLECTION_NAME"))
 
 	// userservice instance
-	UserService := service.UserService{}
+	UserService := service.UserService{
+		DBClient: mongodb.MongoClient{
+			Client: *collection,
+		},
+	}
+
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
