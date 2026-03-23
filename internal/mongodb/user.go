@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"github.com/darthrevan030/go-server-trial/internal/model"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type MongoClient struct {
