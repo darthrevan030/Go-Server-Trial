@@ -3,7 +3,7 @@ package user
 import "go.mongodb.org/mongo-driver/v2/bson"
 
 type User struct {
-	ID      bson.ObjectID `bson:"_id,omitempt"`
+	ID      bson.ObjectID `bson:"_id,omitempty"`
 	Name    string        `bson:"name,omitempty"`
 	Age     int           `bson:"age,omitempty"`
 	Country string        `bson:"country,omitempty"`
