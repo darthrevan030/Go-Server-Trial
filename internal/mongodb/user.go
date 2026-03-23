@@ -98,5 +98,13 @@ func (c MongoClient) DeleteUserByID(id string) (int, error) {
 }
 
 func (c MongoClient) DeleteAllUsers() (int, error) {
-	return 0, nil
+	filter := bson.D{}
+
+	
+	result, err := c.Client.DeleteOne(context.Background(), filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(result.DeletedCount), nil
 }
