@@ -24,7 +24,7 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest) // 400
 		return
 	}
-	
+
 	// Above is the same as:
 	// err := json.NewDecoder(r.Body).Decode(&req)
 	// if err != nil {
@@ -32,11 +32,10 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 
-
-	// call the repository 
-	id, err := h.repo.CreateUser(User {
-		Name: req.Name,
-		Age: req.Age,
+	// call the repository
+	id, err := h.repo.CreateUser(User{
+		Name:    req.Name,
+		Age:     req.Age,
 		Country: req.Country,
 	})
 
@@ -56,6 +55,22 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func (h Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
+	// decode the req
+	id := chi.URLParam(r, "id") // get id from url
+
+	// call the repository
+	user, err := h.repo.GetUserByID(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound) // 404
+		return
+	}
+
+	// send response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // 200 
+	json.NewEncoder(w).Encode(UserResponse{
+		Data: user,
+	})
 }
 
 func (h Handler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
