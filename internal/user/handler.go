@@ -74,7 +74,19 @@ func (h Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h Handler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	// call the repository 
+	users, err := h.repo.GetAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	return
+	}
 
+	// send response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // 200
+	json.NewEncoder(w).Encode(UserResponse{
+		Data: users,
+	})
 }
 
 func (h Handler) UpdateUserAgeByID(w http.ResponseWriter, r *http.Request) {
