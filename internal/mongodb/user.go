@@ -37,7 +37,30 @@ func (c MongoClient) GetUserByID(id string) (model.User, error) {
 }
 
 func (c MongoClient) GetAllUsers() ([]model.User, error) {
-	return []model.User{}, nil
+	filter := bson.D{}
+	
+	cur, err := c.Client.Find(context.Background(), filter)
+	if err != nil {
+		return  []model.User{}, err
+	}
+	defer cur.Close(context.Background())
+
+	var users []model.User
+
+	for cur.Next(context.Background()) {
+		var user model.User
+
+		err := cur.Decode(&user)
+
+		if err != nil {
+			slog.Error("Error while decoding users", slog.String("error", err.Error()))
+			continue
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 func (c MongoClient) UpdateUserAgeByID(id string, age int) (int, error) {
