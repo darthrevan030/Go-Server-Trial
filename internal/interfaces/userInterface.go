@@ -7,7 +7,7 @@ type UserInterface interface {
 	GetUserByID(string) (model.User, error)
 	GetAllUsers() ([]model.User, error)
 	UpdateUserAgeByID(string, int) (int, error)
-	DeleteUserByID(string, int) (int, error)
+	DeleteUserByID(string) (int, error)
 	DeleteAllUsers() (int, error)
 
 }
