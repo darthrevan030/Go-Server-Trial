@@ -40,12 +40,12 @@ func (h Handler) DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) RegisterRoutes(r chi.Router) {
-	r.Route("/users", func(func(r chi.Router)) {
-		r.Post("/", Handler.CreateUser)
-		r.Get("/", Handler.GetAllUsers)
-		r.Get("/{id}", Handler.GetUserByID)
-		r.Put("/{id}", Handler.UpdateUserAgeByID)
-		r.Delete("/{id}", Handler.DeleteUserByID)
-		r.Delete("/", Handler.DeleteAllUsers)
+	r.Route("/users", func(r chi.Router)) {
+		r.Post("/", h.CreateUser)
+		r.Get("/", h.GetAllUsers)
+		r.Get("/{id}", h.GetUserByID)
+		r.Put("/{id}", h.UpdateUserAgeByID)
+		r.Delete("/{id}", h.DeleteUserByID)
+		r.Delete("/", h.DeleteAllUsers)
 	})
 }
