@@ -64,7 +64,20 @@ func (c MongoClient) GetAllUsers() ([]model.User, error) {
 }
 
 func (c MongoClient) UpdateUserAgeByID(id string, age int) (int, error) {
-	return 0, nil
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return 0, fmt.Errorf("Invalid ID")
+	}
+	
+	filter := bson.D{{Key: "_id", Value: docID}}
+	updateStatement := bson.D{{Key: "$set", Value: bson.D{{Key: "age", Value: age}}}}
+	
+	result, err := c.Client.UpdateOne(context.Background(), filter, updateStatement)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(result.ModifiedCount), nil
 }
 
 func (c MongoClient) DeleteUserByID(id string) (int, error) {
