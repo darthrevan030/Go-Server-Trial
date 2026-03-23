@@ -17,8 +17,23 @@ func (c MongoClient) CreateUser(user model.User) (string, error) {
 	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
-func (c MongoClient) GetUserByID(user string) (model.User, error) {
-	return model.User{}, nil
+func (c MongoClient) GetUserByID(id string) (model.User, error) {
+	docID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return model.User{}, fmt.Errorf("Invalid ID")
+	}
+	
+	var user model.User
+	filter := bson.D{Key: "_id", Value: docID }
+
+	err = c.Client.FindOne(context.Background(), filter).Decode(&user)
+	if err == mongo.ErrNoDocuments {
+		return model.User{}, fmt.Errorf("Record Does Not Exist")
+	} else if err != nil {
+		return model.User{}, err
+	}
+
+	return user, nil
 }
 
 func (c MongoClient) GetAllUsers() ([]model.User, error) {
