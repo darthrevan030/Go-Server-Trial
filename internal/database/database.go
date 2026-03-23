@@ -10,9 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-func MongodbConnect(usr string) *mongo.Client {
-	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(os.Getenv("MONGODB_URI")).SetServerAPIOptions(serverAPI)
+func MongodbConnect(uri string) *mongo.Client {
+	opts := options.Client().ApplyURI(uri)
 
 	client, err := mongo.Connect(opts)
 	if err != nil {
