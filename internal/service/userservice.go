@@ -31,5 +31,5 @@ func (service UserService) DeleteUserByID(writer http.ResponseWriter, request *h
 }
 
 func (service UserService) DeleteAllUsers(writer http.ResponseWriter, request *http.Request) {
-	
+
 }

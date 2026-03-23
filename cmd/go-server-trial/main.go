@@ -26,26 +26,24 @@ func init() {
 	slog.Info("Environment Variables Loaded Successfully")
 }
 
-
 func mongoConnectionOpen() *mongo.Client {
-    serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-    opts := options.Client().ApplyURI(os.Getenv("MONGODB_URI")).SetServerAPIOptions(serverAPI)
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	opts := options.Client().ApplyURI(os.Getenv("MONGODB_URI")).SetServerAPIOptions(serverAPI)
 
-    client, err := mongo.Connect(opts)
-    if err != nil {
-        log.Fatal("Failed to connect to MongoDB: ", err)
-    }
+	client, err := mongo.Connect(opts)
+	if err != nil {
+		log.Fatal("Failed to connect to MongoDB: ", err)
+	}
 
-    // ping to verify
-    var result bson.M
-    if err := client.Database(os.Getenv("MONGODB_URI")).RunCommand(context.TODO(), bson.D{{"ping", 1}}).Decode(&result); err != nil {
-        log.Fatal("MongoDB ping failed: ", err)
-    }
+	// ping to verify
+	var result bson.M
+	if err := client.Database(os.Getenv("MONGODB_URI")).RunCommand(context.TODO(), bson.D{{"ping", 1}}).Decode(&result); err != nil {
+		log.Fatal("MongoDB ping failed: ", err)
+	}
 
-    log.Println("Connected to MongoDB!")
-    return client
+	log.Println("Connected to MongoDB!")
+	return client
 }
-
 
 func main() {
 
@@ -61,7 +59,6 @@ func main() {
 		},
 	}
 
-
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
@@ -69,9 +66,9 @@ func main() {
 		r.Get("/health", func(writer http.ResponseWriter, request *http.Request) {
 			writer.Write([]byte("Server is healthy"))
 		})
-	
+
 		r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
-			writer.Write([]byte("Welcome"))	
+			writer.Write([]byte("Welcome"))
 		})
 
 		r.Post("/users", UserService.CreateUser)
@@ -80,9 +77,9 @@ func main() {
 		r.Put("/users/{id}", UserService.UpdateUserAgeByID)
 		r.Delete("/users/{id}", UserService.DeleteUserByID)
 		r.Delete("/users", UserService.DeleteAllUsers)
-	
+
 	})
-	log.Println("Server running on :3000")  
-    log.Fatal(http.ListenAndServe(":3000", r))
+	log.Println("Server running on :3000")
+	log.Fatal(http.ListenAndServe(":3000", r))
 	http.ListenAndServe(":3000", r)
 }

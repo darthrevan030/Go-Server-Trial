@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"path/filepath"
 
 	"github.com/darthrevan030/go-server-trial/internal/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
