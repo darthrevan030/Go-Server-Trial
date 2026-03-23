@@ -10,7 +10,11 @@ type MongoClient struct {
 }
 
 func (c MongoClient) CreateUser(user model.User) (string, error) {
-	return "", nil
+	result, err := c.Client.InsertOne(context.Background(), user)
+	if err!= nil {
+		return "", err
+	}
+	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
 func (c MongoClient) GetUserByID(user string) (model.User, error) {
