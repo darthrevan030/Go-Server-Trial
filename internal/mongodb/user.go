@@ -24,7 +24,7 @@ func (c MongoClient) GetUserByID(id string) (model.User, error) {
 	}
 	
 	var user model.User
-	filter := bson.D{Key: "_id", Value: docID }
+	filter := bson.D{{Key: "_id", Value: docID }}
 
 	err = c.Client.FindOne(context.Background(), filter).Decode(&user)
 	if err == mongo.ErrNoDocuments {
