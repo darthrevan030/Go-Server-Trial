@@ -17,6 +17,41 @@ func NewHandler(repo Repository) *Handler {
 
 func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
+	// decode req body
+	var req UserRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest) // 400
+		return
+	}
+	
+	// Above is the same as:
+	// err := json.NewDecoder(r.Body).Decode(&req)
+	// if err != nil {
+	// 	http.Error(w, "Invalid request body", http.StatusBadRequest)
+	// 	return
+	// }
+
+
+	// call the repository 
+	id, err := h.repo.CreateUser(User {
+		Name: req.Name,
+		Age: req.Age,
+		Country: req.Country,
+	})
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError) // 500
+		return
+	}
+
+	// send response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated) // 201
+	json.NewEncoder(w).Encode(UserResponse{
+		Data: map[string]string{"id": id},
+	})
+
 }
 
 func (h Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
