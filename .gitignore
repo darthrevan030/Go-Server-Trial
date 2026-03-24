@@ -1,1 +1,46 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/build/
+
+# Main binary (adjust to your cmd name)
+cmd/go-server-trial/go-server-trial
+cmd/money-pasar-backend/money-pasar-backend
+
+# Test binaries
+*.test
+*.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# Dependency cache
+vendor/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Air (live reload tool)
+tmp/
