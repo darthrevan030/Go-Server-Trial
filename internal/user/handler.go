@@ -137,6 +137,19 @@ func (h Handler) DeleteUserByID(w http.ResponseWriter, r *http.Request) {
 
 func (h Handler) DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 
+	// call the repo
+	result, err := h.repo.DeleteAllUsers()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError) // 500
+		return
+	}
+
+	// send response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(UserResponse{
+		Data: result,
+	})
 }
 
 func (h *Handler) RegisterRoutes(r chi.Router) {
