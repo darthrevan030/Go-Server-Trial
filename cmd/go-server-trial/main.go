@@ -39,6 +39,6 @@ func main() {
 		userHandler.RegisterRoutes(r)
 	})
 
-	log.Println("Server running on :%s/n", cfg.Port)
+	log.Printf("Server running on :%s/n", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
 }
