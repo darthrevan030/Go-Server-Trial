@@ -10,7 +10,14 @@ import (
 	"github.com/darthrevan030/go-server-trial/internal/user"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+    if err := godotenv.Load(".env.local"); err != nil {
+        log.Fatal("Error loading .env.local")
+    }
+}
 
 func main() {
 
@@ -39,6 +46,6 @@ func main() {
 		userHandler.RegisterRoutes(r)
 	})
 
-	log.Printf("Server running on :%s/n", cfg.Port)
+	log.Printf("Server running on :%s\n", cfg.Port)
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
 }
