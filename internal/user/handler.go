@@ -117,6 +117,22 @@ func (h Handler) UpdateUserAgeByID(w http.ResponseWriter, r *http.Request) {
 
 func (h Handler) DeleteUserByID(w http.ResponseWriter, r *http.Request) {
 
+	// decode the req body
+	id := chi.URLParam(r, "id")
+
+	// call the repo
+	result, err := h.repo.DeleteUserByID(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError) // 500
+		return
+	}
+
+	// send the response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // 200
+	json.NewEncoder(w).Encode(UserResponse{
+		Data: result,
+	})
 }
 
 func (h Handler) DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
